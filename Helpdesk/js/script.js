@@ -89,17 +89,12 @@ function genererSaksnummer() {
  * Vi slår sammen med spread-operatoren (...).
  * [...SAKER, ...lagretsaker] lager en ny array med alle elementene fra begge.
  */
-function hentAlleSaker() {
-  // Hent tekststrengen fra localStorage. Hvis ingenting er lagret ennå,
-  // bruker || "[]" en tom array som standard (tom array i JSON-format er "[]").
-  const lagretTekst = localStorage.getItem("helpdesk-saker") || "[]";
-
-  // JSON.parse gjør tekststrengen tilbake til et JavaScript-array.
-  const lagredeSaker = JSON.parse(lagretTekst);
-
-  // Returner en ny array med alle testdata og alle lagrede saker.
-  return [...SAKER, ...lagredeSaker];
-}
+function hentAlleSaker() { 
+  
+  const lagretTekst  = localStorage.getItem("helpdesk-saker") || "[]"
+  const lagredeSaker = JSON.parse(lagretTekst)
+  return [...SAKER, ...lagredeSaker]
+} 
 
 /**
  * Lagrer én ny sak til localStorage uten å overskrive eksisterende saker.
