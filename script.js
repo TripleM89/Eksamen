@@ -363,7 +363,7 @@ if (nySakForm) {
     const prioritet   = document.getElementById("prioritet").value;
     const beskrivelse = document.getElementById("beskrivelse").value.trim();
     // .checked gir true/false for en avkrysningsboks
-    const samtykke    = document.getElementById("samtykke").checked;
+  
 
     // ── VALIDERING 1: E-post ──
     // Vi godtar bare skole-e-postadresser av sikkerhetsgrunner.
@@ -385,19 +385,23 @@ if (nySakForm) {
     // ── VALIDERING 2: GDPR-samtykke ──
     // Vi kan ikke behandle personopplysninger uten samtykke.
     // Dette er et krav i GDPR artikkel 6(1)(a).
-    if (!samtykke) {
-      document.getElementById("samtykke-feil").classList.remove("hidden");
-      return; // Stopp innsending
-    } else {
-      // Skjul feilmeldingen hvis brukeren har krysset av
-      document.getElementById("samtykke-feil").classList.add("hidden");
-    }
 
-    // ── LAG SAK-OBJEKT ──
-    // Alle validerte data samles i ett objekt.
-    // Objektliteral-syntaks: { nøkkel: verdi }
-    // Kortform (ES6): når variabelnavnet er det samme som nøkkelnavnet
-    //   kan vi skrive bare variabelnavnet: { tittel } i stedet for { tittel: tittel }
+
+
+
+
+  const samtykke = document.getElementById("samtykke").checked; 
+
+
+if (!samtykke) {
+  document.getElementById("samtykke-feil").classList.remove("hidden")
+  return
+} else {
+  document.getElementById("samtykke-feil").classList.add("hidden")
+}
+
+
+
     const nySak = {
       id: nesteId++,       // nesteId er fra data.js, økes med ++ etter bruk
       tittel,              // Kortform for tittel: tittel

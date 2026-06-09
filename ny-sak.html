@@ -54,11 +54,9 @@
           name="navn"
           placeholder="Fornavn Etternavn"
           required
-          <!--
             required er et HTML5-attributt som hindrer innsending
             hvis feltet er tomt. Vi gjør ekstra validering i JS også.
           -->
-        />
       </div>
 
       <!-- ── FELT: E-post ── -->
@@ -70,13 +68,11 @@
           name="epost"
           placeholder="fornavn@elev.oslo.kommune.no"
           required
-          <!--
             type="email" gjør at nettleseren sjekker at det er en
             gyldig e-postadresse (inneholder @ og domene).
             Vi gjør en ekstra sjekk i JS for å begrense til
             skole-e-postadresser.
           -->
-        />
         <!--
           Feilmelding som vises hvis e-posten er ugyldig.
           class="hidden" skjuler den som standard.
