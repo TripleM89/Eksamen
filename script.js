@@ -84,6 +84,17 @@ function statusKlasse(status) {
   }
 }
 
+
+function prioritetKlasse(prioritet) {
+  switch (prioritet) {
+    case "lav":     return "prioritet-lav"
+    case "medium":  return "prioritet-medium"
+    case "høy":     return "prioritet-høy"
+    case "kritisk": return "prioritet-kritisk"
+    default:        return ""
+  }
+}
+
 /**
  * Gjør om en ISO-datostreng (YYYY-MM-DD) til norsk format (DD.MM.YYYY).
  *
@@ -281,20 +292,25 @@ function visAlleSaker(saker) {
   // Lag ett sak-kort per sak
   saker.forEach(sak => {
     const kort = document.createElement("div");
-    kort.className = "sak-kort";
+    kort.className = "sak-kort"
     kort.innerHTML = `
       <div class="sak-kort-info">
         <h3>${sak.tittel}</h3>
         <p class="sak-kort-meta">
-          Kategori: <strong>${sak.kategori}</strong> ·
-          Prioritet: <strong>${sak.prioritet}</strong> ·
+        Kategori: <strong>${sak.kategori}</strong> ·
           ${formaterDato(sak.dato)}
         </p>
       </div>
+      <div style="display:flex; flex-direction:column; align-items:flex-end; gap:8px;">
       <span class="status-badge ${statusKlasse(sak.status)}">${sak.status}</span>
-    `;
-    container.appendChild(kort);
-  });
+      <span class="prioritet-badge ${prioritetKlasse(sak.prioritet)}">${sak.prioritet}</span>
+      <button class="btn-endre-prioritet" onclick="endrePrioritet(${sak.id})">
+        Endre prioritet
+      </button>
+    </div>
+    `
+    container.appendChild(kort)
+  })
 }
 
 
@@ -346,6 +362,15 @@ function filtrerOgVis() {
     );
   }
 
+const sorterValg     = document.getElementById("sorter-prioritet")?.value || ""
+  const prioritetVerdi = { kritisk: 4, høy: 3, medium: 2, lav: 1 }
+
+  if (sorterValg === "høy-først") {
+    resultat = [...resultat].sort((a, b) => prioritetVerdi[b.prioritet] - prioritetVerdi[a.prioritet])
+  } else if (sorterValg === "lav-først") {
+    resultat = [...resultat].sort((a, b) => prioritetVerdi[a.prioritet] - prioritetVerdi[b.prioritet])
+  }
+
   // Vis det endelige resultatet
   visAlleSaker(resultat);
 }
@@ -358,12 +383,24 @@ if (document.getElementById("alle-saker")) {
 // Lytt på endringer i filter-dropdown-menyene.
 document.getElementById("filter-status")?.addEventListener("change", filtrerOgVis);
 document.getElementById("filter-kategori")?.addEventListener("change", filtrerOgVis);
+document.getElementById("sorter-prioritet")?.addEventListener("change", filtrerOgVis);
 
 // Søkeknapp: filtrer når brukeren klikker
 document.getElementById("søk-btn")?.addEventListener("click", filtrerOgVis);
 
 // Live-søk: filtrer mens brukeren skriver (ikke bare ved knappetrykk).
 document.getElementById("søk-input")?.addEventListener("input", filtrerOgVis);
+
+function endrePrioritet(sakId) {
+  const rekkefølge = ["lav", "medium", "høy", "kritisk"];
+  const sak = SAKER.find(s => s.id === sakId);
+  if (sak) {
+    const nåværendeIndex = rekkefølge.indexOf(sak.prioritet);
+    const nesteIndex     = (nåværendeIndex + 1) % rekkefølge.length;
+    sak.prioritet        = rekkefølge[nesteIndex];
+    filtrerOgVis();
+  }
+}
 
 
 // ══════════════════════════════════════════════
